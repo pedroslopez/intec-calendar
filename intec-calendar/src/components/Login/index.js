@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Form, FormGroup, FormControl, Col, ControlLabel, Button} from 'react-bootstrap';
-import { IA_URL } from '../../config';
 
 class Login extends Component {
 
@@ -18,34 +17,7 @@ class Login extends Component {
     }
 
     handleSubmit(e) {
-        console.log('begin fetch');
-        fetch(IA_URL + 'Main/Inicio', {
-            method: 'POST',
-            headers: {
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify({
-                auth: {
-                    id: this.state.id,
-                    password: this.state.password
-                },
-                method: 'GET'
-            }),
-        }).then(res => {
-            if(res.status === 200) {
-                // yes
-                return res.text();
-            } else if (res.status === 401) {
-                // no
-                console.log('Unauthorized');
-            } else {
-                // some weird shit's going on bro
-                console.error(res.statusText)
-            }
-        }).then(data => {
-            console.log(data);
-        });
-
+        this.props.onSubmit(this.state.id, this.state.password);
         e.preventDefault();
     }
 
