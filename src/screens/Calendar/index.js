@@ -7,6 +7,12 @@ class Calendar extends Component {
 
     constructor(props) {
         super(props);
+
+        this.handleSelectionChange = this.handleSelectionChange.bind(this);
+    }
+
+    handleSelectionChange(selected) {
+        console.log(selected);
     }
 
     render() {
@@ -16,9 +22,9 @@ class Calendar extends Component {
                 <Col sm={12}>
                     <div>
                     <h2>Calendar</h2>
-                    <p>Inicie sesión con su cuenta de INTEC para iniciar el proceso.</p>
+                    <p>Seleccione las clases que desea exportar al calendario</p>
                     </div>
-                    <Schedule data={this.props.schedule}/>
+                    <Schedule selection selectionDefault={true} onSelectionChange={this.handleSelectionChange} data={this.props.schedule}/>
                 </Col>
             </Row>
         </Grid>

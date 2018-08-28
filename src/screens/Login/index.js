@@ -49,6 +49,7 @@ class Login extends Component {
                 code: cells[0].textContent,
                 name: cells[1].textContent,
                 section: cells[2].textContent,
+                key: cells[0].textContent + '-' + cells[2].textContent,
                 room: cells[3].textContent,
                 teacher: cells[11].textContent,
                 schedule: {

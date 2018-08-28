@@ -6,13 +6,62 @@ class Schedule extends Component {
 
     constructor(props) {
         super(props);
+
+        let selectionDefault = props.selectionDefault || false;
+        console.log(selectionDefault);
+        let selectedClasses = {}
+
+        if(selectionDefault && props.data) {
+            let selected = [];
+            props.data.forEach(element => {
+                selected.push(element.key);
+                selectedClasses[element.key] = true
+            });
+            
+            if(typeof(props.onSelectionChange) === 'function') {
+                props.onSelectionChange(selected);
+            }
+        }
+
+        this.state = {
+            selectedClasses
+        }
+
         this.getRows = this.getRows.bind(this);
+        this.handleSelection = this.handleSelection.bind(this);
+    }
+
+    handleSelection(key, value) {
+        this.setState({
+            selectedClasses: {
+                ...this.state.selectedClasses,
+                [key]: value
+            }
+        }, () => {
+            if(this.props.onSelectionChange && typeof(this.props.onSelectionChange) === 'function') {
+                let selected = [];
+                (Object.entries(this.state.selectedClasses)).forEach(item => {
+                    const [key, value] = item;
+                    if(value) {
+                        selected.push(key);
+                    }
+                });
+                this.props.onSelectionChange(selected);
+            }
+        })
     }
 
     getRows() {
         let schedule = this.props.data;
         return schedule.map((classInfo) => 
-            <tr key={classInfo.code}>
+            <tr key={classInfo.key}>
+                {this.props.selection && <td>
+                    <input
+                        type="checkbox"
+                        checked={this.state.selectedClasses[classInfo.key] || false}
+                        key={classInfo.key}
+                        onChange={(e) => this.handleSelection(classInfo.key, e.target.checked)} />
+                </td>}
                 <td>{classInfo.code}</td>
                 <td>{classInfo.name}</td>
                 <td>{classInfo.section}</td>
@@ -30,9 +79,10 @@ class Schedule extends Component {
 
     render() {
         return (
-            <Table striped>
+            <Table striped responsive>
                 <thead>
                     <tr>
+                        {this.props.selection && <th></th>}
                         <th>Código</th>
                         <th>Asignatura</th>
                         <th>Sec</th>
