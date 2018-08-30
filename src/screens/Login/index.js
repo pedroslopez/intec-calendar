@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Col, Row } from 'react-bootstrap';
+import { Grid, Col, Row, Alert } from 'react-bootstrap';
 import $ from 'jquery';
 
 import LoginForm from '../../components/Login';
@@ -10,6 +10,9 @@ class Login extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            errorMessage: false
+        }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -29,13 +32,15 @@ class Login extends Component {
                 return res.text();
             } else if (res.status === 401) {
                 // no
-                console.log('Unauthorized');
+                return Promise.reject('Unauthorized');
             } else {
                 // some weird shit's going on bro
-                console.error(res.statusText)
+                return Promise.reject(res.statusText);
             }
         }).then(data => {
             this.scrapeSchedule(data);
+        }).catch(err => {
+            this.setState({errorMessage: err});
         });
     }
 
@@ -71,10 +76,13 @@ class Login extends Component {
       <Grid>
         <Row>
             <Col md={6} mdOffset={3}>
-                <div>
+            {this.state.errorMessage && 
+                <Alert bsStyle="danger">
+                    <strong>Error al iniciar sesión</strong> {this.state.errorMessage}
+                </Alert>
+            }
                 <h2>Login</h2>
                 <p>Inicie sesión con su cuenta de INTEC para iniciar el proceso.</p>
-                </div>
                 
                 <LoginForm onSubmit={this.handleSubmit} />
             </Col>
