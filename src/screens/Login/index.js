@@ -40,17 +40,21 @@ class Login extends Component {
         }).then(data => {
             this.scrapeSchedule(data);
         }).catch(err => {
-            this.setState({errorMessage: err});
+            console.error(err);
+            if (typeof(err) === 'string') {
+                this.setState({errorMessage: err});
+            }
+            
         });
     }
 
     scrapeSchedule(html) {
-        let schedule = [];
+        let schedule = {};
 
         $(html).find('.header-tr').each(function() {
             let cells = $(this).children();
 
-            schedule.push({
+            let classInfo = {
                 code: cells[0].textContent,
                 name: cells[1].textContent,
                 section: cells[2].textContent,
@@ -65,7 +69,9 @@ class Login extends Component {
                     friday: cells[8].textContent,
                     saturday: cells[9].textContent
                 }
-            });
+            }
+
+            schedule[classInfo.key] = classInfo;
         });
 
         this.props.receiveSchedule(schedule);

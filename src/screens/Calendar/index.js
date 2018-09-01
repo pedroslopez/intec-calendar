@@ -8,11 +8,11 @@ class Calendar extends Component {
     constructor(props) {
         super(props);
 
-        this.handleSelectionChange = this.handleSelectionChange.bind(this);
+        this.handleSelectionSubmit = this.handleSelectionSubmit.bind(this);
     }
 
-    handleSelectionChange(selected) {
-        console.log(selected);
+    handleSelectionSubmit(selection) {
+        console.log(selection);
     }
 
     render() {
@@ -24,7 +24,11 @@ class Calendar extends Component {
                     <h2>Calendar</h2>
                     <p>Seleccione las clases que desea exportar al calendario</p>
                     </div>
-                    <Schedule selection selectionDefault={true} onSelectionChange={this.handleSelectionChange} data={this.props.schedule}/>
+                    <Schedule selection 
+                        selectionDefault={true} 
+                        onSelectionSubmit={this.handleSelectionSubmit} 
+                        selectionButtonText="Generar calendario"
+                        data={this.props.schedule}/>
                 </Col>
             </Row>
         </Grid>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 
 
 class Schedule extends Component {
@@ -8,12 +8,12 @@ class Schedule extends Component {
         super(props);
 
         let selectionDefault = props.selectionDefault || false;
-        console.log(selectionDefault);
         let selectedClasses = {}
+        let schedule = Object.values(props.data) || [];
 
-        if(selectionDefault && props.data) {
+        if(selectionDefault && schedule) {
             let selected = [];
-            props.data.forEach(element => {
+            schedule.forEach(element => {
                 selected.push(element.key);
                 selectedClasses[element.key] = true
             });
@@ -24,11 +24,14 @@ class Schedule extends Component {
         }
 
         this.state = {
-            selectedClasses
+            selectedClasses,
+            schedule,
+            isLoading: false
         }
 
         this.getRows = this.getRows.bind(this);
         this.handleSelection = this.handleSelection.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSelection(key, value) {
@@ -37,22 +40,25 @@ class Schedule extends Component {
                 ...this.state.selectedClasses,
                 [key]: value
             }
-        }, () => {
-            if(this.props.onSelectionChange && typeof(this.props.onSelectionChange) === 'function') {
-                let selected = [];
-                (Object.entries(this.state.selectedClasses)).forEach(item => {
-                    const [key, value] = item;
-                    if(value) {
-                        selected.push(key);
-                    }
-                });
-                this.props.onSelectionChange(selected);
-            }
         })
     }
 
+    handleSubmit() {
+        if(this.props.onSelectionSubmit && typeof(this.props.onSelectionSubmit) === 'function') {
+            let selected = [];
+            (Object.entries(this.state.selectedClasses)).forEach(item => {
+                const [key, value] = item;
+                if(value) {
+                    selected.push(this.props.data[key]);
+                }
+            });
+
+            this.props.onSelectionSubmit(selected);
+        }
+    }
+
     getRows() {
-        let schedule = this.props.data;
+        let schedule = this.state.schedule;
         return schedule.map((classInfo) => 
             <tr key={classInfo.key}>
                 {this.props.selection && <td>
@@ -79,27 +85,37 @@ class Schedule extends Component {
 
     render() {
         return (
-            <Table striped responsive>
-                <thead>
-                    <tr>
-                        {this.props.selection && <th></th>}
-                        <th>Código</th>
-                        <th>Asignatura</th>
-                        <th>Sec</th>
-                        <th>Aula</th>
-                        <th>Lun</th>
-                        <th>Ma</th>
-                        <th>Mi</th>
-                        <th>Ju</th>
-                        <th>Vi</th>
-                        <th>Sa</th>
-                        <th>Profesor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.getRows()}
-                </tbody>
-            </Table>
+            <div>
+                <Table striped responsive>
+                    <thead>
+                        <tr>
+                            {this.props.selection && <th></th>}
+                            <th>Código</th>
+                            <th>Asignatura</th>
+                            <th>Sec</th>
+                            <th>Aula</th>
+                            <th>Lun</th>
+                            <th>Ma</th>
+                            <th>Mi</th>
+                            <th>Ju</th>
+                            <th>Vi</th>
+                            <th>Sa</th>
+                            <th>Profesor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.getRows()}
+                    </tbody>
+                </Table>
+                {this.props.onSelectionSubmit && 
+                    <Button bsSize="large" block
+                        disabled={this.state.isLoading}
+                        onClick={!this.state.isLoading ? this.handleSubmit : null}>
+                        {this.state.isLoading ? 'Cargando...' : 
+                            this.props.selectionButtonText || "Submit"}
+                    </Button>
+                }
+            </div>
         );
     }
 }
