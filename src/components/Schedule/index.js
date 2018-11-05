@@ -44,6 +44,7 @@ class Schedule extends Component {
     }
 
     handleSubmit() {
+        this.setState({isLoading: true});
         if(this.props.onSelectionSubmit && typeof(this.props.onSelectionSubmit) === 'function') {
             let selected = [];
             (Object.entries(this.state.selectedClasses)).forEach(item => {

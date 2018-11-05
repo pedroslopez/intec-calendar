@@ -1,10 +1,13 @@
 {
   "name": "intec-calendar",
   "version": "0.1.0",
+  "homepage": "https://pedroslopez.me/intec-calendar",
   "private": true,
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "joi-browser": "^13.4.0",
     "jquery": "^3.3.1",
+    "moment": "^2.22.2",
     "react": "^16.4.2",
     "react-bootstrap": "^0.32.3",
     "react-dom": "^16.4.2",
