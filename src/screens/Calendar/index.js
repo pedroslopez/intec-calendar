@@ -34,7 +34,7 @@ class Calendar extends Component {
         const {error, value} = ics.createEvents(events);
         // console.log(value);
         
-        this.setState({downloadUrl: 'data:application/octet-stream,' + encodeURI(value)});
+        this.setState({downloadUrl: 'data:text/calendar,' + encodeURI(value)});
     }
 
     downloadFile(data) {
