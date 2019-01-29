@@ -45,7 +45,7 @@ class Calendar extends Component {
         let currentWeekday = date.getDay();
         let delta = Math.abs(currentWeekday - desiredWeekday);
         if (currentWeekday > desiredWeekday) {
-            delta += 7;
+            delta += 7 - currentWeekday;
         }
 
         date.setDate(date.getDate() + delta);
@@ -75,6 +75,7 @@ class Calendar extends Component {
                     let startTime = parseInt(splitTime[0], 10);
                     let endTime = parseInt(splitTime[1], 10);
                     let date = this.getNextWeekday(today, i+1);
+                    console.log('Next weekday for', days[i], date);
 
                     // classTimes[timeKey] = {time: {startTime, endTime, duration: endTime-startTime}, days: []}
                     classTimes[timeKey] = {
