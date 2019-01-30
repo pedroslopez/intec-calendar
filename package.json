@@ -1,6 +1,6 @@
 {
   "name": "intec-calendar",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "homepage": "https://pedroslopez.me/intec-calendar",
   "private": true,
   "dependencies": {
